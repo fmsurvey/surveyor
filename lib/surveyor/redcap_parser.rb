@@ -43,7 +43,7 @@ module Surveyor
         end
         resolve_references
         Surveyor::RedcapParser.rake_trace  "\n\n-----SAVING SURVEY--------\n\n"
-        Surveyor::RedcapParser.rake_trace context[:survey].save ? "saved. " : 
+        Surveyor::RedcapParser.rake_trace context[:survey].save ? "saved. " :
           " not saved!   There may be model validation errors...
           SURVEY ERRORS: #{context[:survey].errors.full_messages.join(",")}
           SECTION ERRORS: #{context[:survey].sections.map{|x| x.errors.full_messages{|y| y}.join}.join }
@@ -207,7 +207,6 @@ end
 module SurveyorRedcapParserDependencyConditionMethods
   DependencyCondition.instance_eval do
     attr_accessor :question_reference, :answer_reference, :main_question
-    attr_accessible :question_reference, :answer_reference, :main_question
   end
 end
 
