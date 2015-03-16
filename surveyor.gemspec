@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('yard')
   s.add_development_dependency('rake')
   s.add_development_dependency('mysql2')
+  s.add_development_dependency('pry-byebug')
   s.add_development_dependency('bundler', '~> 1.6')
   s.add_development_dependency('rspec-rails', '~> 2.14.2')
   s.add_development_dependency('capybara', '~> 2.2.1')
