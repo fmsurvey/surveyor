@@ -56,10 +56,14 @@ class QuestionGroup < ActiveRecord::Base
 
   def unparse(dsl)
     with_defaults = QuestionGroup.new(:text => text)
-    attrs = self.attributes.delete_if{|k,v| with_defaults[k] == v or %w(created_at updated_at id api_id).include?(k) or (k == "display_type" && %w(grid repeater default).include?(v))}.symbolize_keys!
+    attrs = self.attributes.delete_if{|k,v| with_defaults[k] == v or %w(created_at updated_at reference_identifier id api_id).include?(k) or (k == "display_type" && %w(grid repeater default).include?(v))}.symbolize_keys!
     method = (%w(grid repeater).include?(display_type) ? display_type : "group")
+
     dsl << "\n"
-    dsl << "    #{method} \"#{text}\""
+    dsl << "    #{method}"
+    dsl << "_#{reference_identifier}" unless reference_identifier.blank?
+
+    dsl << " \"#{text}\""
     dsl << (attrs.blank? ? " do\n" : ", #{attrs.inspect.gsub(/\{|\}/, "")} do\n")
     questions.first.answers.each{|answer| answer.unparse(dsl)} if display_type == "grid"
     questions.each{|question| question.unparse(dsl)}
@@ -110,7 +114,7 @@ class DependencyCondition < ActiveRecord::Base
     dsl << "_#{rule_key}" unless rule_key.blank?
     dsl << " :q_#{question.reference_identifier}, \"#{operator}\""
     dsl << (attrs.blank? ? ", {:answer_reference=>\"#{answer && answer.reference_identifier}\"}\n" : ", {#{attrs.inspect.gsub(/\{|\}/, "")}, :answer_reference=>\"#{answer && answer.reference_identifier}\"}\n")
-  end  
+  end
 end
 class Answer < ActiveRecord::Base
   # nonblock
@@ -125,7 +129,7 @@ class Answer < ActiveRecord::Base
     dsl << "_#{reference_identifier}" unless reference_identifier.blank?
     if response_class.to_s.titlecase == text && attrs == {:display_type => "hidden_label"}
       dsl << " :#{response_class}"
-    else    
+    else
       dsl << [ text.blank? ? nil : text == "Other" ? " :other" : text == "Omit" ? " :omit" : " \"#{text}\"",
                 (response_class.blank? or response_class == "answer") ? nil : " #{response_class.to_sym.inspect}",
                 attrs.blank? ? nil : " #{attrs.inspect.gsub(/\{|\}/, "")}\n"].compact.join(",")
