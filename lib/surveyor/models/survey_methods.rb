@@ -86,7 +86,7 @@ module Surveyor
 
       def translation(locale_symbol)
         t = self.translations.where(:locale => locale_symbol.to_s).first
-        {:title => self.title, :description => self.description}.with_indifferent_access.merge(
+        {:title => self.title, :description => self.description}.deep_stringify_keys.with_indifferent_access.merge(
           t ? YAML.load(t.translation || "{}").deep_stringify_keys.with_indifferent_access : {}
         )
       end
