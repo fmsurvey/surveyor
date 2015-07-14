@@ -15,7 +15,7 @@ module Surveyor
         attr_accessible *PermittedParams.new.answer_attributes if defined? ActiveModel::MassAssignmentSecurity
 
         # Validations
-        validates_presence_of :text
+        validates :text, length: { in: 0..255, allow_nil: false }
       end
 
       # Instance Methods

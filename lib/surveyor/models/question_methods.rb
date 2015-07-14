@@ -18,7 +18,8 @@ module Surveyor
         attr_accessible *PermittedParams.new.question_attributes if defined? ActiveModel::MassAssignmentSecurity
 
         # Validations
-        validates_presence_of :text, :display_order
+        validates_presence_of :display_order
+        validates :text, length: { in: 0..255, allow_nil: false }
         validates_inclusion_of :is_mandatory, :in => [true, false]
       end
 
