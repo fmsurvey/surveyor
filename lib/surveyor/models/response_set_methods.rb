@@ -43,13 +43,13 @@ module Surveyor
       def to_csv(access_code = false, print_header = true)
         result = Surveyor::Common.csv_impl.generate do |csv|
           if print_header
-            csv << (access_code ? ["response set access code"] : []) +
+            csv << ["user_id"] + (access_code ? ["response set access code"] : []) +
               csv_question_columns.map{|qcol| "question.#{qcol}"} +
               csv_answer_columns.map{|acol| "answer.#{acol}"} +
               csv_response_columns.map{|rcol| "response.#{rcol}"}
           end
           responses.each do |response|
-            csv << (access_code ? [self.access_code] : []) +
+            csv << [user_id] + (access_code ? [self.access_code] : []) +
               csv_question_columns.map{|qcol| response.question.send(qcol)} +
               csv_answer_columns.map{|acol| response.answer.send(acol)} +
               csv_response_columns.map{|rcol| response.send(rcol)}
