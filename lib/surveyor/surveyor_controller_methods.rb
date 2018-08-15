@@ -89,7 +89,7 @@ module Surveyor
           if @response_set
             render :json => @response_set.reload.all_dependencies(question_ids_for_dependencies)
           else
-            render :text => "No response set #{params[:response_set_code]}",
+            render :plain => "No response set #{params[:response_set_code]}",
               :status => 404
           end
         end
@@ -105,7 +105,7 @@ module Surveyor
             responses.destroy_all
             render :json => @response_set.reload.all_dependencies([question_id])
           else
-            render :text => "No response set #{params[:response_set_code]}" #, :status => 404
+            render :plain => "No response set #{params[:response_set_code]}" #, :status => 404
           end
         end
       end
@@ -217,7 +217,7 @@ module Surveyor
           redirect_to path
         end
         format.js do
-          render :text => message, :status => 403
+          render :plain => message, :status => 403
         end
       end
     end
